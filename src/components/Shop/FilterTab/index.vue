@@ -38,7 +38,7 @@
       </div>
       <div class="list" v-if="!yearBlockClicked">
         <b-checkbox v-for="item in yearArray"  
-        v-show="!item.isDisabled"
+        :disabled="item.isDisabled"
         :key="item.year" 
         v-model="selectedYears"
         :native-value="item.year"
@@ -58,7 +58,7 @@
         :key="item.color" 
         v-model="selectedColors"
         :native-value="item.color"
-        v-show="!item.isDisabled">
+        :disabled="item.isDisabled">
         {{item.color}}
         </b-checkbox>
       </div>      
@@ -74,7 +74,7 @@
         :key="item.RAM" 
         v-model="selectedRAMs"
         :native-value="item.RAM"
-        v-show="!item.isDisabled">
+        :disabled="item.isDisabled">
         {{item.RAM +' '+'ГБ'}}
         </b-checkbox>
       </div>      
@@ -90,7 +90,7 @@
         :key="item.memory" 
         v-model="selectedMemory"
         :native-value="item.memory"
-        v-show="!item.isDisabled">
+        :disabled="item.isDisabled">
         {{item.memory +' '+'ГБ'}}
         </b-checkbox>
       </div>      
@@ -193,14 +193,15 @@ export default {
     }
   },
 
-  
-  mounted: function () {
-    this.maxPrice = this.maxFilteredPrice
-    this.minPrice = this.minFilteredPrice
+  mounted () {
+    this.loadData().then(()=>{
+      this.maxPrice = this.maxFilteredPrice
+      this.minPrice = this.minFilteredPrice
+    })
   },
   
   methods: {
-    ...mapActions(["setFilterData"]),
+    ...mapActions(["setFilterData",'loadData']),
 
     closeTab(el) { 
       this[el] = !this[el]
@@ -220,7 +221,9 @@ export default {
     //   return min
     // }
   },
+  
 };
+
 </script>
 
 <style lang="scss">

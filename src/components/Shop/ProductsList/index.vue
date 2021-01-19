@@ -4,7 +4,7 @@
             :imgSrc = "item.imgSrc"
             :price = "item.price"
             :title = "item.title"
-            :isElInCart = isElInCart(item.id)
+            :isElInCart = isElInCart(item._id)
             @to-cart="toCart(item)"
         />
     </div>
@@ -28,7 +28,7 @@
             ...mapActions(['addToCart']),
 
             isElInCart(itemId) {
-                let isElInCart =this.cart.find(item => item.id === itemId)
+                let isElInCart =this.cart.find(item => item._id === itemId)
                 if(!isElInCart) return 'В корзину'
                 return 'Додано'
             },

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import apiEndpoints from "../../constants/apiEndpoints";
-import products from "@/products";
+// import products from "@/products";
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -9,7 +9,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     currency: 'UAH',
-    products,
+    products: [],
     filter:{
       title: null,
       minPrice: null,
@@ -22,8 +22,6 @@ const store = new Vuex.Store({
     },
     cart: [],
     isCartOpen: false,
-    // authData: JSON.parse(localStorage.getItem('authData')) || null,
-    // expiresAt: localStorage.getItem('expiresAt') || null,
   },
   mutations: {
     setProductsListData(state, data) {
@@ -64,7 +62,7 @@ const store = new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios
           .get(apiEndpoints.products.read)
-          .then((res) => res.data)
+          .then(res => res.data)
           .then((resData) => {
             if (resData.success) {
               commit("setProductsListData", resData.products);
@@ -197,7 +195,8 @@ const store = new Vuex.Store({
       allColors.sort()
       
       allColors.forEach(currentColor=>{
-        let isColorInList = getters.filteredColors.find(filteredItem => filteredItem.color == currentColor)
+        let isColorInList = getters.filteredColors.find(filteredItem =>
+          (filteredItem.color == currentColor) || state.filter.color.includes(currentColor))
         if(isColorInList) processedColors.push({color:currentColor,isDisabled:false})
         else processedColors.push({color:currentColor,isDisabled:true})
       })
@@ -213,7 +212,8 @@ const store = new Vuex.Store({
       allYears.sort((a,b)=> b-a)
       
       allYears.forEach(currentYear=>{
-          let isYearInList = getters.filteredYears.find(filteredItem => filteredItem.year == currentYear)
+          let isYearInList = getters.filteredYears.find(filteredItem => 
+            (filteredItem.year == currentYear) || state.filter.year.includes(currentYear))
           if(isYearInList) processedYears.push({year:currentYear,isDisabled:false})
           else processedYears.push({year:currentYear,isDisabled:true})
       })
@@ -229,7 +229,8 @@ const store = new Vuex.Store({
       allRAMs.sort((a,b)=> b-a)
       
       allRAMs.forEach(currentRAM=>{
-          let isRAMInList = getters.filteredRAMs.find(filteredItem => filteredItem.RAM == currentRAM)
+          let isRAMInList = getters.filteredRAMs.find(filteredItem =>
+            (filteredItem.RAM == currentRAM) || state.filter.RAM.includes(currentRAM))
           if(isRAMInList) processedRAMs.push({RAM:currentRAM,isDisabled:false})
           else processedRAMs.push({RAM:currentRAM,isDisabled:true})
       })
@@ -245,7 +246,8 @@ const store = new Vuex.Store({
       allMemory.sort((a,b)=> b-a)
       
       allMemory.forEach(currentMemory=>{
-          let isMemoryInList = getters.filteredMemory.find(filteredItem => filteredItem.memory == currentMemory)
+          let isMemoryInList = getters.filteredMemory.find(filteredItem =>
+            (filteredItem.memory == currentMemory) || state.filter.memory.includes(currentMemory))
           if(isMemoryInList) processedMemory.push({memory:currentMemory,isDisabled:false})
           else processedMemory.push({memory:currentMemory,isDisabled:true})
       })
