@@ -1,24 +1,46 @@
 <template>
-    <div class="Shop">
-        <header-shop class="HeaderShop"/>
+    <div class="Shop"> 
         <filter-tab class="FilterTab"/>
-        <search v-if="$route.fullPath === '/' " class="Search"/>
-        <router-view></router-view>
+        <search class="Search"/>
+        <products-list class="ProductList"/>
+        <cart/>
     </div>
 </template>
 
 <script>
-    import HeaderShop from "./HeaderShop";
-    import FilterTab from "./FilterTab";
+    import Cart from "./Cart";
     import Search from "./Search";
+    import FilterTab from "./FilterTab";
+    import ProductsList from "./ProductsList";
+
+    import { mapGetters } from "vuex";
 
     export default {
         name: "Shop",
 
         components: {
-            HeaderShop,
             FilterTab,
             Search,
+            ProductsList,
+            Cart,
+        },
+
+        computed: {
+            ...mapGetters(['filteredProducts']),   
+            maxPrice() {
+                let max = 0;
+                this.filteredProducts.forEach(el => {
+                  if(max < el.price) max = el.price
+                });
+                return max
+            },
+            minPrice() {
+                let min = 9999999999;
+                this.filteredProducts.forEach(el => {
+                  if(min > el.price) min = el.price
+                });
+                return min
+            }
         },
     }
 </script>
@@ -27,14 +49,9 @@
     .Shop {
         display: grid;
         grid-auto-columns: 300px 1fr;
-        grid-template-rows: 80px 120px 1fr;
-        grid-template-areas: "HeaderShop HeaderShop"
-                             "FilterTab  Search"         
+        grid-template-rows: 120px 1fr;
+        grid-template-areas: "FilterTab  Search"         
                              "FilterTab  ProductList";
-    }
-
-    .HeaderShop {
-        grid-area: HeaderShop;
     }
 
     .FilterTab {

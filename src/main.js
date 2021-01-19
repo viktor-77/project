@@ -3,6 +3,9 @@ import App from './App.vue'
 import store from "./store"
 import router from "./router";
 
+import dotenv from "dotenv";
+dotenv.config()
+
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 

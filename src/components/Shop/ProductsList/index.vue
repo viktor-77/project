@@ -46,9 +46,11 @@
         width: 100%;
         display: grid;
         grid-template-columns: repeat(3, 30%);
-        grid-gap: 40px;
+        grid-template-rows: minmax(100px,320px);
+        grid-gap: 30px;
+        justify-content: center;
         text-align: center;
-        padding: 15px;
+        padding: 0 15px 40px;
         margin: 0 auto;
     }
 </style>

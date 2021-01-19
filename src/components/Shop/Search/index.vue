@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <span>Пошук</span>  <input v-model="textFilter" class="input" placeholder=". . ."/>
+        <span>Пошук</span>  
+        <b-input v-model="textFilter" class="search-input" placeholder=". . ." icon="magnify" type="search"/>
     </div>
 </template>
 
@@ -28,7 +29,18 @@
         },
     }
 </script>
-
+<style lang="scss">
+    .search-input {
+        
+        input {
+            text-align: left;
+            border-radius: 20px;
+            font-size: 17px;
+            padding-left: 4px;
+            margin-right: 10px;
+        } 
+    }
+</style>
 <style lang="scss" scoped>
     .container {
         height: 120px;
@@ -41,13 +53,6 @@
             font-weight: 500;
             margin-right: 16px;
         }
-    }
-    
-    .input {
-        width: 300px;
-        font-size: 17px;
-        border-radius: 20px;
-        padding-left: 20px;
     }
  
 </style>

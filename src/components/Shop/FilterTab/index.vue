@@ -22,12 +22,12 @@
       </div>    
       <div class="price" v-if="!priceBlockClicked">
         <div class="price-input">
-          <input v-model="minPrice" type="number" class="input"/>
+          <input v-model.number="minPrice" type="number" class="input" min="1" :class="{priceInputError: priceInputError}" placeholder="Min"/>
           <hr>
-          <input v-model="maxPrice" type="number" class="input"/>
+          <input v-model.number="maxPrice" type="number" class="input" :class="{priceInputError: priceInputError}" placeholder="Max"/>
         </div>
-        <b-slider v-model="numbers" :min="this.minPrice" :max="this.maxPrice" :step="1000" class="price-slider">
-        </b-slider>
+        <!-- <b-slider v-model="priceRange" :step="100" class="price-slider">
+        </b-slider> -->
       </div>
     </div>
     <div class="section"> <!--Year-->
@@ -38,10 +38,11 @@
       </div>
       <div class="list" v-if="!yearBlockClicked">
         <b-checkbox v-for="item in yearArray"  
+        v-show="!item.isDisabled"
         :key="item.year" 
         v-model="selectedYears"
         :native-value="item.year"
-        :disabled="item.isDisabled">
+        >
         {{item.year}}
         </b-checkbox>
       </div>
@@ -57,14 +58,14 @@
         :key="item.color" 
         v-model="selectedColors"
         :native-value="item.color"
-        :disabled="item.isDisabled">
+        v-show="!item.isDisabled">
         {{item.color}}
         </b-checkbox>
       </div>      
     </div>
     <div class="section"> <!--RAM-->
       <div class="heading">
-        <div class="title">Оперативна пам'ять</div>
+        <div class="title">Оперативна <br> пам'ять</div>
         <i class="fas fa-angle-down angle-down" @click="closeTab('RAM_BlockClicked')" 
         :class="{clicked: RAM_BlockClicked}"/>
       </div>
@@ -73,14 +74,14 @@
         :key="item.RAM" 
         v-model="selectedRAMs"
         :native-value="item.RAM"
-        :disabled="item.isDisabled">
+        v-show="!item.isDisabled">
         {{item.RAM +' '+'ГБ'}}
         </b-checkbox>
       </div>      
     </div>
     <div class="section"> <!--Memory-->
       <div class="heading">
-        <div class="title">Пам'ять</div>
+        <div class="title">Внутрішня <br> пам'ять</div>
         <i class="fas fa-angle-down angle-down" @click="closeTab('memoryBlockClicked')" 
         :class="{clicked: memoryBlockClicked}"/>
       </div>
@@ -89,7 +90,7 @@
         :key="item.memory" 
         v-model="selectedMemory"
         :native-value="item.memory"
-        :disabled="item.isDisabled">
+        v-show="!item.isDisabled">
         {{item.memory +' '+'ГБ'}}
         </b-checkbox>
       </div>      
@@ -118,21 +119,28 @@ export default {
       selectedMemory: [],
       
       category: null,
-      maxPrice: null,
       minPrice: null,
-      numbers:[this.minPrice,this.maxPrice],
+      maxPrice: null,
+      // priceRange:[this.minPrice,this.maxPrice],
+      priceInputError: false
     };
   },
 
   watch: {
     minPrice(val) {
-      this.numbers[0] = val;
-      this.setFilterData({ minPrice: val || null });
+      if(this.minPrice > this.maxPrice) this.priceInputError = true
+      else {
+        this.setFilterData({ minPrice: val || null });
+        this.priceInputError = false
+      }
     },
 
     maxPrice(val) {
-      this.numbers[1] = val;
-      this.setFilterData({ maxPrice: val || null });
+      if(this.minPrice > this.maxPrice) this.priceInputError = true
+      else {
+        this.setFilterData({ maxPrice: val || null });
+        this.priceInputError = false
+      }
     },
 
     // numbers(Old, New) {
@@ -166,18 +174,60 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['products','colorArray','yearArray','categoriesArray','RAM_Array','memoryArray']),
+    ...mapGetters(['products','colorArray','yearArray','categoriesArray','RAM_Array','memoryArray','filteredProducts']),
+
+    maxFilteredPrice() {
+      let max = 0;
+      this.filteredProducts.forEach(el => {
+        if(max < el.price) max = el.price
+      });
+      return max
+    },
+
+    minFilteredPrice() {
+      let min = 9999999999;
+      this.filteredProducts.forEach(el => {
+        if(min > el.price) min = el.price
+      });
+      return min
+    }
   },
 
+  
+  mounted: function () {
+    this.maxPrice = this.maxFilteredPrice
+    this.minPrice = this.minFilteredPrice
+  },
+  
   methods: {
     ...mapActions(["setFilterData"]),
 
     closeTab(el) { 
       this[el] = !this[el]
-    }
+    },
+    // maxFilteredPrice() {
+    //   let max = 0;
+    //   this.filteredProducts.forEach(el => {
+    //     if(max < el.price) max = el.price
+    //   });
+    //   return max
+    // },
+    // minFilteredPrice() {
+    //   let min = 9999999999;
+    //   this.filteredProducts.forEach(el => {
+    //     if(min > el.price) min = el.price
+    //   });
+    //   return min
+    // }
   },
 };
 </script>
+
+<style lang="scss">
+  .check:hover {
+    transform: scale(1.1);
+  }
+</style>
 
 <style lang="scss" scoped>
 .container {
@@ -185,7 +235,7 @@ export default {
   padding-top: 30px;
   padding-right: 20px;
   width: 100%;
-  background-color: #f2f2f2;
+  background-color: #f0f0f0;
 }
 
 .section {
@@ -210,14 +260,14 @@ export default {
   max-width: 200px;
 }
 
-.angle-down{
+i{
   cursor: pointer;
   transform: rotate(180deg);
-  font-size: 25px;
+  font-size: 30px;
   font-weight: normal;
   &:hover {
     opacity: 0.8;
-    transition-delay: 0.1s
+    transition-delay: 0.05s;
   }
 }
 
@@ -250,4 +300,8 @@ export default {
   transform: rotate(0deg);
 }
 
+.priceInputError {
+  border: 1px solid #f84147;
+  background-color: rgba(248, 65, 71, 0.25);
+}
 </style>

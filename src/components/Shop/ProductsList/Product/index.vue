@@ -1,5 +1,5 @@
 <template>
-    <div class="container"> 
+    <div class="containerr"> 
         <img :src="imgSrc" alt="" class="productImage">        
         <div class="title">
             {{title}}
@@ -8,12 +8,12 @@
             {{isElInCart}}
         </div>
         <div class="price">
-            <span v-if="currency==='UAH'">
+            <div v-if="currency==='UAH'">
                 {{price | uahPrice}}
-            </span>
-            <span v-if="currency==='USD'">
+            </div>
+            <div v-if="currency==='USD'">
                 {{price | dolPrice}}
-            </span>
+            </div>
         </div>
     </div>
 </template>
@@ -64,14 +64,15 @@
     }
 </script>
 
-<style lang="css" scoped> 
-    .container {
-        display: grid;
-        grid-gap: 6px;
+<style lang="scss" scoped> 
+    .containerr {
+        display: flex;
+        flex-direction: column;
     }
 
     .productImage {
         width: 100%;
+        margin-bottom: 14px;
     }
 
     .addToCart {
@@ -81,10 +82,14 @@
         justify-content: center;
         width: 120px;
         height: 30px;
-        margin: 0 auto;
+        margin: 6px auto;
         background-color: #7957D5;
         color: white;
         border-radius: 7px;
+        &:hover {
+            transform: scale(1.05);
+            transition-delay: .1;
+        }
     }
     
     .title {

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import apiEndpoints from "../../constants/apiEndpoints";
 import products from "@/products";
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -19,8 +21,14 @@ const store = new Vuex.Store({
       memory: [],
     },
     cart: [],
+    isCartOpen: false,
+    // authData: JSON.parse(localStorage.getItem('authData')) || null,
+    // expiresAt: localStorage.getItem('expiresAt') || null,
   },
   mutations: {
+    setProductsListData(state, data) {
+      state.products = [...data];
+    },
     setFilterData(state,item) {
       state.filter = {
         ...state.filter,         
@@ -37,18 +45,38 @@ const store = new Vuex.Store({
     },
     decrementElementInCart(state, itemId) {
       let elementIndex = state.cart.findIndex(el =>el.id === itemId)
-      state.cart[elementIndex].count--
-      if(state.cart[elementIndex].count === 0) 
-      state.cart.splice(elementIndex, 1)
+      if(state.cart[elementIndex].count > 1) 
+        state.cart[elementIndex].count--
     },
-    clearCart(state) {
-      state.cart.splice(0, state.cart.length)
+    productDeleteFromCart(state, itemId) {
+      let elementIndex = state.cart.findIndex(el =>el.id === itemId)
+      state.cart.splice(elementIndex,1)
     },
     changeCurrency(state, currency) {
       state.currency = currency
-    }
+    },
+    showCart(state) {
+      state.isCartOpen = !state.isCartOpen
+    },
   },
   actions: {
+    loadData({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(apiEndpoints.products.read)
+          .then((res) => res.data)
+          .then((resData) => {
+            if (resData.success) {
+              commit("setProductsListData", resData.products);
+            }
+            resolve(true);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(false);
+          })
+      });
+    },
     setFilterData({commit}, item) {
       commit('setFilterData', item)
     },
@@ -61,17 +89,21 @@ const store = new Vuex.Store({
     decrementElementInCart({ commit }, item) {
       commit('decrementElementInCart', item)
     },
-    clearCart({commit}) {
-      commit('clearCart')
+    productDeleteFromCart({ commit }, item) {
+      commit('productDeleteFromCart', item)
     },
     changeCurrency({commit}, currency) {
       commit('changeCurrency', currency)
-    }
+    },
+    showCart({commit}) {
+      commit('showCart')
+    },
   },
   getters: {
     cart: state => state.cart,
     products: state => state.products,
     currency: state => state.currency,
+    isCartOpen: state => state.isCartOpen,
     categoriesArray: (state) => { //all kind of categories
       let categories = []
       state.products.forEach(item => {
