@@ -66,7 +66,7 @@
 
 <style lang="scss" scoped> 
     .containerr {
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
     }
 

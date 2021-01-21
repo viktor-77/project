@@ -2,10 +2,10 @@
     <div class="container-wraper">
         <div class="container">            
             <div class="logo">
-                    <router-link to="/">
-                        <i class="fad fa-atom-alt"/>
-                        <div class="logo-title">Techno Store</div>
-                    </router-link>
+                <router-link to="/">
+                    <i class="fad fa-atom-alt"/>
+                    <div class="logo-title">Techno Store</div>
+                </router-link>
             </div>
             <div class="menu">             
                 <b-select v-model="currency" class="select" v-if="this.$route.path==='/'">
@@ -23,7 +23,7 @@
                         LogIn
                     </router-link>
                     <span>/</span>
-                    <router-link to="/sighnup">
+                    <router-link to="/signup">
                         signup
                     </router-link>
                 </div>
@@ -67,7 +67,9 @@
 
 <style lang="scss" scoped>
 .container-wraper {
-     background-color: #333;
+    background-color: #333;
+    width: 100%;
+    z-index: 9999999999;
 }
 
 .container {
@@ -100,7 +102,8 @@
     }
     &:hover {
         opacity: .8;
-        transition-delay: 0.1s
+        transition-delay: 0.03s;
+        transform: scale(1.01);
     }
 }
 
@@ -156,7 +159,9 @@ option {
     }
     a:hover{
         opacity: .7;
-        transition-delay: 0.05s
+        transition-delay: 0.05s;
+        transform: scale(1.01);
+        
     }     
     span {
         margin: 0 6px;

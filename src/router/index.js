@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 
 import Shop from "@/components/Shop";
 import LogIn from "@/components/LogIn";
-import SighnUp from "@/components/SighnUp";
+import SignUp from "@/components/SignUp";
 
 
 Vue.use(VueRouter);
@@ -11,7 +11,7 @@ Vue.use(VueRouter);
 const routes = [
   { path: "/", component: Shop, name: 'Shop' },
   { path: "/login", component: LogIn, name: 'LogIn' },
-  { path: "/sighnup", component: SighnUp, name: 'SighnUp' },
+  { path: "/signup", component: SignUp, name: 'SignUp' },
 ];
 
 const router = new VueRouter({

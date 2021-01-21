@@ -13,8 +13,6 @@
     import FilterTab from "./FilterTab";
     import ProductsList from "./ProductsList";
 
-    import { mapGetters } from "vuex";
-
     export default {
         name: "Shop",
 
@@ -23,24 +21,6 @@
             Search,
             ProductsList,
             Cart,
-        },
-
-        computed: {
-            ...mapGetters(['filteredProducts']),   
-            maxPrice() {
-                let max = 0;
-                this.filteredProducts.forEach(el => {
-                  if(max < el.price) max = el.price
-                });
-                return max
-            },
-            minPrice() {
-                let min = 9999999999;
-                this.filteredProducts.forEach(el => {
-                  if(min > el.price) min = el.price
-                });
-                return min
-            }
         },
     }
 </script>

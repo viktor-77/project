@@ -1,6 +1,6 @@
 <template>
     <div class="ProductsList">
-        <product v-for="(item,index) in filteredProducts" :key="index"
+        <product v-for="(item) in filteredProducts" :key="item._id"
             :imgSrc = "item.imgSrc"
             :price = "item.price"
             :title = "item.title"
@@ -13,6 +13,7 @@
 <script>
     import { mapActions , mapGetters} from 'vuex'
     import Product from "./Product";
+    
     export default {
         name: "ProductsList",
 
@@ -46,11 +47,17 @@
         width: 100%;
         display: grid;
         grid-template-columns: repeat(3, 30%);
-        grid-template-rows: minmax(100px,320px);
         grid-gap: 30px;
         justify-content: center;
         text-align: center;
         padding: 0 15px 40px;
         margin: 0 auto;
+    }
+    @media(max-width: 900px) {
+        .ProductsList {
+        grid-template-columns: repeat(2, 40%);
+        grid-gap: 20px;
+    }
+        
     }
 </style>

@@ -17,12 +17,12 @@
                                 {{item.price | dolPrice}}
                         </span>
                 </div>
-                <i class="fas fa-trash" @click="productDelete(item.id)"/>
+                <i class="fas fa-trash" @click="productDelete(item._id)"/>
                 </div>
                 <div class="manipulators">
-                    <i class="fas fa-minus" @click="decrementElement(item.id)" :class="{disabled: item.count<=1}"/>
+                    <i class="fas fa-minus" @click="decrementElement(item._id)" :class="{disabled_cursor: item.count<=1}"/>
                     <input class="input" v-model="item.count"  type="number" min="1"/>
-                    <i class="fas fa-plus" @click="incrementElement(item.id)"/>
+                    <i class="fas fa-plus" @click="incrementElement(item._id)"/>
                     <div class="general-product-price">
                         <span v-if="currency==='UAH'" class="product-price">
                             {{item.count*item.price | uahPrice}}
@@ -58,12 +58,6 @@
 
     export default {
         name: "Cart", 
-
-        data() {
-            return {
-                active: true,
-            }
-        },
 
         filters: {
             dolPrice,
@@ -211,7 +205,8 @@
         padding: 30px 0;
     }
 
-    .disabled {
-        color: grey !important;
+    .disabled_cursor {
+        color: #444 !important;
+        cursor: not-allowed;
     }
 </style>

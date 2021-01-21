@@ -14,11 +14,11 @@ import HeaderShop from "./components/HeaderShop";
 
 export default {
   name: 'App',
+  
   components: {
     FooterShop,
     HeaderShop,
   },
-
 }
 </script>
 
@@ -32,7 +32,7 @@ export default {
   font-family: montserrat, Helvetica, Arial, sans-serif;
 }
 
-input {
+input { /*delet input-nuber`s arrows*/ 
   text-align: center;
 }
 input[type="number"]::-webkit-outer-spin-button,
