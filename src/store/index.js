@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import auth from "./modules/auth";
+import auth from "./modules/auth";
 import products from "./modules/products";
 import cart from "./modules/cart";
 import filters from "./modules/filters";
@@ -35,6 +35,9 @@ const store = new Vuex.Store({
     ...filters.getters,
     ...cart.getters,
   },
+  modules: {
+    auth,
+  }
 })
 
 export default store

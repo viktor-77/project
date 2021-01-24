@@ -1,54 +1,115 @@
 <template>
     <div class="wrapper">
         <form @submit.prevent="submit">
-            <b-field label="Email" custom-class="is-medium">
-                <b-input type="email" v-model="email" class="b-input" name="email"/>
+            <b-field label="Email" custom-class="is-medium"  
+              :type="{ 'is-danger': emailError }"
+              :message="{ 'Неправильний формат вводу, Email повинен містити символ «‎@»': emailError }">
+                <b-input type="email" v-model="email" class="b-input"/>
             </b-field>
-            <b-field label="Nick-Name" custom-class="is-medium">
-                <b-input type="text" v-model="nick" class="b-input" name="nick"/>
+            <b-field label="Nick-Name" custom-class="is-medium"
+              :type="{ 'is-danger': nickError }"
+              :message="{ 'Nick-Name повинен містити мінімун 4 символи': nickError }">
+                <b-input type="text" v-model="nick" class="b-input" maxlength="25"/>
             </b-field>
-            <b-field label="Password" custom-class="is-medium">
-                <b-input type="password" v-model="password" class="b-input" name="password" password-reveal/>
+            <b-field label="Password" custom-class="is-medium"
+              :type="{ 'is-danger': passwordError }"
+              :message="{ 'Пароль повинен містити мінімун 8 символів': passwordError }">
+                <b-input type="password" v-model="password" class="b-input" maxlength="25" password-reveal/>
             </b-field>
-            <b-button native-type="submit" class="is-primary">Sign Up</b-button>
+            <div class="error-message" v-if="message">
+                {{message}}
+            </div>
+            <b-button native-type="submit" class="is-primary" :disabled="isInputDisabled">
+                Sign Up
+            </b-button>
         </form>
     </div>
 </template>
 
 <script>
+    import { mapActions } from "vuex";
+
     export default {
         name: 'SignUp',
 
         data() {
             return {
                 email: '',
-                nack: '',
-                password: ''
+                nick: '',
+                password: '',
+                message: '',
+
+                emailError: false,
+                nickError: false,
+                passwordError: false,
             }
         },
 
-    //     methods: {
-    //     ...mapActions('auth',['signup']),
+        watch: {
+            email() {
+                clearTimeout(this.emailErrorTimer)
+                if( this.email.length && (!this.email.includes('@')) ) {
+                    this.emailErrorTimer = setTimeout(() => {
+                        this.emailError = true
+                    }, 1500)
+                }
+                else this.emailError = false
+            },
 
-    //     async submit() {
-    //         try {
-    //             const user = {
-    //                 nick: this.nick,
-    //                 email: this.email,
-    //                 password: this.password
-    //             };
-    //             const result = await this.signup(user);
-    //             if (result === true) {
-    //                 this.message = "";
-    //                 this.$router.push({path: "/login"});
-    //             } else {
-    //                 this.message = result; //'SignUp error!';
-    //             }
-    //         } catch (err) {
-    //             this.message = err.message;
-    //         }
-    //     }
-    // },
+            nick() {
+                clearTimeout(this.nickErrorTimer)
+                if( this.nick.length && (this.nick.length < 4) ) {
+                    this.nickErrorTimer = setTimeout(() => {
+                        this.nickError = true
+                    }, 1500)
+                }
+                else this.nickError = false
+            },
+
+            password() {
+                clearTimeout(this.passwordErrorTimer)
+                if( this.password.length && (this.password.length < 8) ) {
+                    this.passwordErrorTimer = setTimeout(() => {
+                        this.passwordError = true
+                    }, 1500)
+                }
+                else this.passwordError = false
+            },
+        },
+
+        computed: {
+            isInputDisabled() {
+                if( 
+                    this.email.length && this.email.includes('@') &&
+                    (this.nick.length >= 4) &&
+                    (this.password.length >= 8)
+                ) return false
+                return true
+            }
+        },
+
+        methods: {
+            ...mapActions('auth',['signup']),
+
+            async submit() {
+                try {
+                    const user = {
+                        nick: this.nick,
+                        email: this.email,
+                        password: this.password
+                    };
+                    const result = await this.signup(user);
+                    if (result === true) {
+                        this.message = "";
+                        this.$router.push({path: "/login"});
+                    } else {
+                        this.message = result; //'SignUp error!';
+                    }
+                } catch (err) {
+                    this.message = err.message;
+                }
+            },
+        },
     }
 </script>
 

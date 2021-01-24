@@ -69,18 +69,20 @@
 .container-wraper {
     background-color: #333;
     width: 100%;
-    z-index: 9999999999;
+    position: sticky;
+    top: -6px;
+    z-index: 999;
 }
 
 .container {
     max-width: 90%;
     margin: 0 auto;
-    height: 80px;
+    height: 70px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
+    padding: 8px;
 }
 
 .logo {
@@ -103,7 +105,7 @@
     &:hover {
         opacity: .8;
         transition-delay: 0.03s;
-        transform: scale(1.01);
+        transform: scale(1.005);
     }
 }
 
@@ -160,7 +162,7 @@ option {
     a:hover{
         opacity: .7;
         transition-delay: 0.05s;
-        transform: scale(1.01);
+        transform: scale(1.03);
         
     }     
     span {

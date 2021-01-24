@@ -1,7 +1,9 @@
 <template>
     <div class="container">
+        <label class="label-search">
         <span>Пошук</span>  
         <b-input v-model="textFilter" class="search-input" placeholder=". . ." icon="magnify" type="search"/>
+        </label>
     </div>
 </template>
 
@@ -31,7 +33,6 @@
 </script>
 <style lang="scss">
     .search-input {
-        
         input {
             text-align: left;
             border-radius: 20px;
@@ -42,6 +43,9 @@
     }
 </style>
 <style lang="scss" scoped>
+    .label-search {
+        display: flex;
+    }
     .container {
         height: 120px;
         display: flex;

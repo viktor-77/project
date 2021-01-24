@@ -1,11 +1,15 @@
 <template>
     <div class="wrapper">
-        <form action="apiEndpoints.users.login" enctype='multipart/form-data' method="POST">
-            <b-field label="Email" custom-class="is-medium">
+        <form action="/" enctype='multipart/form-data' method="POST">
+            <b-field label="Email" custom-class="is-medium"
+              :type="{ 'is-danger': emailError }"
+              :message="{ 'Неправильний формат вводу, Email повинен містити символ «‎@»': emailError }">
                 <b-input type="email" v-model="email" class="b-input" name="email"/>
             </b-field>
-            <b-field label="Password" custom-class="is-medium">
-                <b-input type="password" v-model="password" class="b-input" name="password" password-reveal/>
+            <b-field label="Password" custom-class="is-medium"
+              :type="{ 'is-danger': passwordError }"
+              :message="{ 'Пароль повинен містити мінімун 8 символів': passwordError }">
+                <b-input type="password" v-model="password" class="b-input" name="password" maxlength="25" password-reveal/>
             </b-field>
             <b-field class="remember-input">
                 <b-checkbox :value="!true">
@@ -13,7 +17,9 @@
                 </b-checkbox>
             </b-field>
             <br>
-            <b-button native-type="submit" class="is-primary">Login</b-button>
+            <b-button native-type="submit" class="is-primary" :disabled="isInputDisabled">
+                Login
+            </b-button>
         </form>
     </div>
 </template>
@@ -25,7 +31,42 @@
         data() {
             return {
                 email: '',
-                password: ''
+                password: '',
+
+                emailError: false,
+                passwordError: false,
+            }
+        },
+
+        watch: {
+            email() {
+                clearTimeout(this.emailErrorTimer)
+                if( this.email.length && (!this.email.includes('@')) ) {
+                    this.emailErrorTimer = setTimeout(() => {
+                        this.emailError = true
+                    }, 1500)
+                }
+                else this.emailError = false
+            },
+
+            password() {
+                clearTimeout(this.passwordErrorTimer)
+                if( this.password.length && (this.password.length < 8) ) {
+                    this.passwordErrorTimer = setTimeout(() => {
+                        this.passwordError = true
+                    }, 1500)
+                }
+                else this.passwordError = false
+            },
+        },
+
+        computed: {
+            isInputDisabled() {
+                if( 
+                    this.email.length && this.email.includes('@') &&
+                    (this.password.length >= 8)
+                ) return false
+                return true
             }
         },
     }

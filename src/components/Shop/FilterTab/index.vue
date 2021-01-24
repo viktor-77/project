@@ -269,11 +269,9 @@ export default {
   width: 100%;
   background-color: #f0f0f0;
 }
+
 .container-inner {
-  position: sticky;
-  bottom: 0;
   margin-bottom: 10px;
-  overflow: auto;
 }
 
 .section {
