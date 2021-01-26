@@ -30,7 +30,7 @@
     
     footer {
         height: 100%;
-        max-width: 80%;
+        max-width: 85%;
         margin: 0 auto;
         display: flex;
         align-items: center;

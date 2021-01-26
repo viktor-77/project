@@ -92,6 +92,7 @@
             ...mapActions('auth',['signup']),
 
             async submit() {
+                this.message = '';
                 try {
                     const user = {
                         nick: this.nick,
@@ -103,13 +104,23 @@
                         this.message = "";
                         this.$router.push({path: "/login"});
                     } else {
-                        this.message = result; //'SignUp error!';
+                        this.message = result; 
                     }
-                } catch (err) {
-                    this.message = err.message;
+                } catch(err) {
+                    let errMsg = err.response.data
+                    if(errMsg === 'emailIsInDB') {
+                        document.querySelectorAll("input")[0].focus()
+                        this.message = 'За цією поштою уже здійснювалася реєстрація'
+                    }
+                    if(errMsg === 'nickIsInDB') {
+                        document.querySelectorAll("input")[1].focus()
+                        this.message = 'Такий Nick-Name уже використовується'
+                    }
+
+
                 }
-            },
-        },
+            }
+        }
     }
 </script>
 
@@ -144,6 +155,12 @@
     }
 
     button {
+        font-weight: 500;
+    }
+
+    .error-message {
+        margin-bottom: 10px;
+        color: red;
         font-weight: 500;
     }
 </style>

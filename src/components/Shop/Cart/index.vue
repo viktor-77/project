@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="isCartOpened" :on-cancel="closeCart">
+    <b-modal v-model="isCartOpened" :on-cancel="closeCart" >
         <div v-if="cart.length">
             <header>
                 Корзина
@@ -45,7 +45,7 @@
                 </b-button>
             </div>
         </div>
-        <div v-else class="empty-cart">
+        <div v-else class="empty-cart" >
                 Корзина пуста
         </div>
     </b-modal>

@@ -18,21 +18,19 @@ export default {
     },
   },
   actions: {
-    signup(/*{ commit },*/ { nick, email, password }) {
+    signup({ commit }, { nick, email, password }) {
       return new Promise((resolve, reject) => {
         axios
           .post(apiEndpoints.user.signup, { nick, email, password })
           .then(function() {
-            // commit('setAuthData', { authData: user.data })
-            resolve(true);
+            commit('setAuthData' /*{ authData: user.data }*/)
+            resolve();
           })
           .catch((err) => {
-            // commit("clearAuthData");
-            reject(err);
+            reject(err)
           });
       });
     },
-
   },
   getters: {
     userNick: (state) => (state.authData ? state.authData.nick : null),
