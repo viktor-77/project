@@ -105,7 +105,7 @@
     &:hover {
         opacity: .8;
         transition-delay: 0.03s;
-        transform: scale(1.005);
+        transform: scale(1.001);
     }
 }
 
@@ -162,8 +162,7 @@ option {
     a:hover{
         opacity: .7;
         transition-delay: 0.05s;
-        transform: scale(1.03);
-        
+        transform: scale(1.01);
     }     
     span {
         margin: 0 6px;
