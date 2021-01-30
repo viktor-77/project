@@ -86,6 +86,7 @@
 }
 
 .logo {
+    transition-duration: 0.5s;
     a:active, 
     a:hover, 
     a {
@@ -104,8 +105,7 @@
     }
     &:hover {
         opacity: .8;
-        transition-delay: 0.03s;
-        transform: scale(1.001);
+        transform: scale(1.01);
     }
 }
 

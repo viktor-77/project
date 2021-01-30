@@ -99,26 +99,19 @@
                         email: this.email,
                         password: this.password
                     };
-                    const result = await this.signup(user);
-                    if (result === true) {
-                        this.message = "";
-                        this.$router.push({path: "/login"});
-                    } else {
-                        this.message = result; 
-                    }
+                    await this.signup(user);
+                    this.$router.push({path: "/login"});
                 } catch(err) {
                     let errMsg = err.response.data
-                    if(errMsg === 'emailIsInDB') {
+                    if(errMsg === 'emailSignedUp') {
                         document.querySelectorAll("input")[0].focus()
                         this.message = 'За цією поштою уже здійснювалася реєстрація'
                     }
-                    if(errMsg === 'nickIsInDB') {
+                    if(errMsg === 'nickSignedUp') {
                         document.querySelectorAll("input")[1].focus()
                         this.message = 'Такий Nick-Name уже використовується'
                     }
-
-
-                }
+                }       
             }
         }
     }

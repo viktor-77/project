@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <form action="/" enctype='multipart/form-data' method="POST">
+        <form @submit.prevent="submit">
             <b-field label="Email" custom-class="is-medium"
               :type="{ 'is-danger': emailError }"
               :message="{ 'Неправильний формат вводу, Email повинен містити символ «‎@»': emailError }">
@@ -16,7 +16,9 @@
                     Запам'ятати
                 </b-checkbox>
             </b-field>
-            <br>
+            <div v-if="message" class="error-message">
+                {{message}}
+            </div>
             <b-button native-type="submit" class="is-primary" :disabled="isInputDisabled">
                 Login
             </b-button>
@@ -25,6 +27,9 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import { mapActions } from 'vuex';
+
     export default {
         name: 'LogIn',
 
@@ -32,6 +37,7 @@
             return {
                 email: '',
                 password: '',
+                message: '',
 
                 emailError: false,
                 passwordError: false,
@@ -69,6 +75,32 @@
                 return true
             }
         },
+
+        methods: {
+            ...mapActions('auth',['login']),
+             
+            async submit() {
+                this.message = ''
+                try{
+                    const user = {
+                        email: this.email,
+                        password: this.password
+                    }
+                    await this.login(user)
+                    this.$router.push({path: "/"});
+                } catch (err) {
+                    let errMsg = err.response.data
+                    if(errMsg === 'emailError') {
+                        document.querySelectorAll("input")[0].focus()
+                        this.message = 'Невірно введено пошту'
+                    }
+                    if(errMsg === 'passwordError') {
+                        document.querySelectorAll("input")[1].focus()
+                        this.message = 'Невірно введено пароль'
+                    }
+                }
+            }
+        },
     }
 </script>
 
@@ -102,9 +134,18 @@
 
     .remember-input {
         margin-right: auto;
+        margin-top: -20px;
+        margin-bottom: 30px !important;
     }
 
     button {
         margin-top: -10px;
+    }
+
+    .error-message {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        color: red;
+        font-weight: 500;
     }
 </style>

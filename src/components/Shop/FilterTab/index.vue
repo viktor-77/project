@@ -193,7 +193,7 @@ export default {
     ...mapGetters(['colorArray','yearArray','categoriesArray','RAM_Array','memoryArray','filteredProducts','currency']),
     
     maxFilteredPrice() {
-      let max = 0;
+      let max = this.filteredProducts[0].price;
       this.filteredProducts.forEach(el => {
         if(max < el.price) max = el.price
       });
@@ -201,7 +201,7 @@ export default {
     },
 
     minFilteredPrice() {
-      let min = 9999999999;
+      let min = this.filteredProducts[0].price;
       this.filteredProducts.forEach(el => {
         if(min > el.price) min = el.price
       });

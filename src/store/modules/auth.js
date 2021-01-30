@@ -16,18 +16,33 @@ export default {
       localStorage.setItem("authData", JSON.stringify(state.authData));
       localStorage.setItem("expiresAt", JSON.stringify(state.expiresAt));
     },
+    clearAuthData() {
+      
+    },
   },
   actions: {
-    signup({ commit }, { nick, email, password }) {
+    signup({ nick, email, password }) {
       return new Promise((resolve, reject) => {
         axios
           .post(apiEndpoints.user.signup, { nick, email, password })
           .then(function() {
-            commit('setAuthData' /*{ authData: user.data }*/)
             resolve();
           })
           .catch((err) => {
             reject(err)
+          });
+      });
+    },
+    login({m}, { email, password }) {
+      console.log(m);
+      return new Promise((resolve,reject) => {
+        axios
+          .post(apiEndpoints.user.login, { email, password })
+          .then(() => {
+            resolve()
+          })
+          .catch((err) => {
+            reject(err);
           });
       });
     },
