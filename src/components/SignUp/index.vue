@@ -1,25 +1,26 @@
 <template>
-    <div class="wrapper">
-        <form @submit.prevent="submit">
-            <b-field label="Email" custom-class="is-medium"  
+    <div class="signup-wrapper">
+        <form @submit.prevent="submit" class="form">
+            <h1 class="form__heading">SighUp</h1>
+            <b-field label="Email" custom-class="form__label"  
               :type="{ 'is-danger': emailError }"
               :message="{ 'Неправильний формат вводу, Email повинен містити символ «‎@»': emailError }">
-                <b-input type="email" v-model="email" class="b-input"/>
+                <b-input type="email" v-model="email" class="form__input"/>
             </b-field>
-            <b-field label="Nick-Name" custom-class="is-medium"
+            <b-field label="Nick-Name" custom-class="form__label"
               :type="{ 'is-danger': nickError }"
               :message="{ 'Nick-Name повинен містити мінімун 4 символи': nickError }">
-                <b-input type="text" v-model="nick" class="b-input" maxlength="25"/>
+                <b-input type="text" v-model="nick" class="form__input" maxlength="25"/>
             </b-field>
-            <b-field label="Password" custom-class="is-medium"
+            <b-field label="Password" custom-class="form__label"
               :type="{ 'is-danger': passwordError }"
               :message="{ 'Пароль повинен містити мінімун 8 символів': passwordError }">
-                <b-input type="password" v-model="password" class="b-input" maxlength="25" password-reveal/>
+                <b-input type="password" v-model="password" class="form__input" maxlength="25" password-reveal/>
             </b-field>
-            <div class="error-message" v-if="message">
+            <div class="form__error-message" v-if="message">
                 {{message}}
             </div>
-            <b-button native-type="submit" class="is-primary" :disabled="isInputDisabled">
+            <b-button native-type="form__submit-button" class="is-primary" :disabled="isInputDisabled">
                 Sign Up
             </b-button>
         </form>
@@ -27,7 +28,8 @@
 </template>
 
 <script>
-    import { mapActions } from "vuex";
+    import axios from "axios";
+    import apiEndpoints from "../../constants/apiEndpoints";
 
     export default {
         name: 'SignUp',
@@ -89,8 +91,6 @@
         },
 
         methods: {
-            ...mapActions('auth',['signup']),
-
             async submit() {
                 this.message = '';
                 try {
@@ -99,7 +99,16 @@
                         email: this.email,
                         password: this.password
                     };
-                    await this.signup(user);
+                    await new Promise((resolve, reject) => {
+                      axios
+                        .post(apiEndpoints.user.signup, user)
+                        .then(function() {
+                          resolve();
+                        })
+                        .catch((err) => {
+                          reject(err)
+                        });
+                    });
                     this.$router.push({path: "/login"});
                 } catch(err) {
                     let errMsg = err.response.data
@@ -117,18 +126,24 @@
     }
 </script>
 
+<style lang="scss">   //special style fot buefy components
+    .label {
+        color: #4a4a4a !important;
+        font-size: 18px !important;
+    }
+</style>
 <style lang="scss" scoped>
-    .wrapper {
+    .signup-wrapper {
         background: url('https://images.wallpaperscraft.ru/image/chernyy_siniy_abstrakciya_polosy_513_1920x1080.jpg')
             center no-repeat;
         background-size: cover;
-        height: calc(100vh - 130px);
+        min-height: calc(100vh - 130px);
         display: flex;
-        flex-direction: column;
         justify-content: center;
+        align-items: center;
     }
 
-    form {
+    .form {
         text-align: center;
         width: 40%;
         background-color: whitesmoke;
@@ -136,24 +151,38 @@
         padding: 30px;
         border-radius: 6px;
         max-width: 360px;
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         align-items: center;
+        margin: 10px;
     }
 
-    .b-input {
+    .form__heading {
+        font-size: 28px;
+        font-weight: 600;
+        width: 100%;
+        &:after {
+            content: '';
+            display: block;
+            border-bottom: 1px solid #bbb;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .form__input {
         margin: 0 auto;
         margin-bottom: 6px;
         width: 300px;
     }
 
-    button {
+    .form__error-message {
+        margin-bottom: 10px;
+        color: red;
         font-weight: 500;
     }
 
-    .error-message {
-        margin-bottom: 10px;
-        color: red;
+    .form__submit-button {
         font-weight: 500;
     }
 </style>

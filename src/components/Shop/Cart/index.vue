@@ -1,35 +1,35 @@
 <template>
     <b-modal v-model="isCartOpened" :on-cancel="closeCart" >
         <div v-if="cart.length">
-            <header>
+            <div class="heading">
                 Корзина
-            </header>
-            <div v-for="item in cart " :key="item.id" class="product-container">
-                <div class="product-info">
-                <img :src="item.imgSrc" alt="product foto" class="product-foto">
-                <div>
-                        <span >{{item.title}}</span>
+            </div>
+            <div v-for="item in cart " :key="item.id" class="cart-container">
+                <div class="product">
+                    <img :src="item.imgSrc" alt="product foto" class="product__img">
+                    <div>
+                        <span class="product__title">{{item.title}}</span>
                         <br>
-                        <span v-if="currency==='UAH'" class="product-price">
+                        <span v-if="currency==='UAH'" class="product__price">
                                 {{item.price | uahPrice}}
                         </span>
-                        <span v-if="currency==='USD'" class="product-price">
+                        <span v-if="currency==='USD'" class="product__price">
                                 {{item.price | dolPrice}}
                         </span>
-                </div>
-                <i class="fas fa-trash" @click="productDelete(item._id)"/>
-                </div>
-                <div class="manipulators">
-                    <i class="fas fa-minus" @click="decrementElement(item._id)" :class="{disabled_cursor: item.count<=1}"/>
-                    <input class="input" v-model="item.count"  type="number" min="1"/>
-                    <i class="fas fa-plus" @click="incrementElement(item._id)"/>
-                    <div class="general-product-price">
-                        <span v-if="currency==='UAH'" class="product-price">
-                            {{item.count*item.price | uahPrice}}
-                        </span>
-                        <span v-if="currency==='USD'" class="product-price">
-                            {{item.count*item.price | dolPrice}}
-                        </span>
+                    </div>
+                    <i class="fas fa-trash product__delete-icon" @click="productDelete(item._id)"/>
+                    <div class="product-manipulators">
+                        <i class="fas fa-minus manipulators__icon" @click="decrementElement(item._id)" :class="{disabled_cursor: item.count<=1}"/>
+                        <input class="input" v-model="item.count"  type="number" min="1"/>
+                        <i class="fas fa-plus manipulators__icon" @click="incrementElement(item._id)"/>
+                        <div class="total-products-price">
+                            <span v-if="currency==='UAH'" class="product-price">
+                                {{item.count*item.price | uahPrice}}
+                            </span>
+                            <span v-if="currency==='USD'" class="product-price">
+                                {{item.count*item.price | dolPrice}}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div v-else class="empty-cart" >
-                Корзина пуста
+            Корзина пуста
         </div>
     </b-modal>
 </template>
@@ -108,8 +108,10 @@
     }
 </script>
 
-<style> /*for customizing buefy element*/ 
+<style lang="scss"> //special style fot buefy component
     .modal-content {
+        margin-top: 80px!important;
+        margin-bottom: 20px!important;
         border-radius: 8px;
         padding: 0 30px ;
         background-color: #fff;
@@ -117,44 +119,48 @@
     }
 </style>
 <style lang="scss" scoped>
-    header {
+    %button-animation {
+        opacity: .65;
+        transition-duration: 0.5s;
+        cursor: pointer;
+    }
+
+    .heading {
         text-align: center;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 500;
         border-bottom: 1px solid #bbb;
         padding: 10px;
     }
 
-    .product-container {
+    .cart-container {
         border-bottom: 1px solid #bbb;
         padding: 20px;
     }
 
-    .product-info {
+    .product {
         display: flex;
         align-items: flex-start;
-        img {
+        &__img {
             height: 120px;
             margin-right:6px;
         }
-        span {
+        &__title {
             font-weight: 500;
         }
-        i {
+        &__delete-icon {
             font-size: 20px;
-            opacity: .7;
-            transition-delay: .1;
             margin-left: auto;
             &:hover {
-                opacity: 1;
+                @extend %button-animation
             }
         }
-        .product-price {
+        &__price {
             font-size: 20px;
         }
     }
 
-    .manipulators {
+    .product-manipulators {
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -163,20 +169,20 @@
         width: 50px;
         margin: 0 8px;
         }
-        .general-product-price {
+        .total-products-price {
             margin-left: 30px;
             font-weight: 500;
             font-size: 20px;
             width: 130px;
         }
-        i {
-        color: #7957d5;
-        font-size: 25px;
-        font-weight: 400;
-        &:hover {
-            color: #6745c3;
-            transition-delay: 0.1s
-        }
+        .manipulators__icon {
+            color: #7957d5;
+            font-size: 28px;
+            font-weight: 400;
+            &:hover {
+                color: #6745c3;
+                transition-duration: 0.5s
+            }
         }
     }
 

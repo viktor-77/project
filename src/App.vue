@@ -31,22 +31,32 @@ export default {
   box-sizing: border-box;
   font-family: montserrat, Helvetica, Arial, sans-serif;
 }
+*:hover{
+  -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
+  backface-visibility: hidden;
+}
+    a:active, 
+    a:hover, 
+    a {
+        text-decoration: none;
+        color: white !important; 
+    }
 
-input { /*delet input-nuber`s arrows*/ 
+input{ /*delet input-nuber`s arrows*/ 
   text-align: center;
 }
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-inner-spin-button{
     -webkit-appearance: none; 
 }
 input[type='number'],
 input[type="number"]:hover,
-input[type="number"]:focus {
+input[type="number"]:focus{
     appearance: none;
     -moz-appearance: textfield;
 }
 
-#app {
+#app{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

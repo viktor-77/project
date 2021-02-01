@@ -1,15 +1,15 @@
 <template>
-    <div class="footer-container">
-        <footer>
-            <div class="info">
+    <div class="footer-wraper">
+        <footer class="footer-container">
+            <div class="footer__info">
                 © Інтернет-магазин «Techno store™» <br>
                 2020 – 2021
             </div>
-            <div class="icons">
-                <i class="fab fa-facebook"></i>
-                <i class="fab fa-twitter"></i>
-                <i class="fab fa-instagram"></i>
-                <i class="fab fa-tripadvisor"></i>
+            <div class="footer__icons">
+                <i class="fab fa-facebook footer__icon"></i>
+                <i class="fab fa-twitter footer__icon"></i>
+                <i class="fab fa-instagram footer__icon"></i>
+                <i class="fab fa-tripadvisor footer__icon"></i>
             </div>
         </footer>
     </div>
@@ -22,13 +22,20 @@
 </script>
 
 <style lang="scss" scoped>
-    .footer-container {
+    %button-animation {
+        opacity: .65;
+        transition-duration: 0.3s;
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    .footer-wraper {
         width: 100%;
         background-color: #262626;
         padding: 14px 0;
     }
     
-    footer {
+    .footer-container {
         height: 100%;
         max-width: 85%;
         margin: 0 auto;
@@ -37,22 +44,19 @@
         justify-content: space-between;
     }
 
-    .info {
+    .footer__info {
         color: white;
         font-weight: normal;
         font-size: 12px;
     }
 
-    .icons {
-        display: grid;
-        grid-template-columns: repeat(4,auto);
-        grid-column-gap: 20px;
-        font-size: 26px;
+    .footer__icons {
+        display: flex;
+        column-gap: 20px;
+        font-size: 28px;
         color: white;
-        i:hover {
-            opacity: .6;
-            transform: scale(1.1);
-            transition-delay: .1;
+        .footer__icon:hover {
+            @extend  %button-animation
         }
     }
 </style>

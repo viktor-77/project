@@ -10,52 +10,35 @@ export default {
   mutations: {
     setAuthData(state, { authData, expiresAt }) {
       state.authData = { ...authData };
-      state.expiresAt =
-        expiresAt || state.authData.expires_in * 1000 + new Date().getTime();
-
+      state.expiresAt = expiresAt || new Date().getTime() +7200000
       localStorage.setItem("authData", JSON.stringify(state.authData));
       localStorage.setItem("expiresAt", JSON.stringify(state.expiresAt));
     },
-    clearAuthData() {
-      
-    },
+    clearAuthData(state) {
+      state.authData = null
+      localStorage.removeItem("authData");
+    }
   },
   actions: {
-    signup({ nick, email, password }) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(apiEndpoints.user.signup, { nick, email, password })
-          .then(function() {
-            resolve();
-          })
-          .catch((err) => {
-            reject(err)
-          });
-      });
-    },
-    login({m}, { email, password }) {
-      console.log(m);
+    login({commit}, { email, password }) {
       return new Promise((resolve,reject) => {
         axios
           .post(apiEndpoints.user.login, { email, password })
-          .then(() => {
+          .then((res)=>res.data)
+          .then((data) => {
+            commit("setAuthData", {...data.user});
             resolve()
           })
           .catch((err) => {
-            reject(err);
+            reject(err.response.data);
           });
       });
     },
+    clearAuthData({commit}) {
+      commit("clearAuthData");
+    }
   },
   getters: {
-    userNick: (state) => (state.authData ? state.authData.nick : null),
-    isAuthenticated: (state) => () => {
-      return state.authData && new Date().getTime() < state.expiresAt;
-    },
-    getAccessToken: (state) => () => {
-      return state.authData && state.authData.access_token;
-    },
-    authorized: (state) =>
-      state.authData && new Date().getTime() < state.expiresAt,
+    authData: state=>state.authData
   },
 };

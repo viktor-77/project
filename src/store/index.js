@@ -16,28 +16,29 @@ const store = new Vuex.Store({
     ...cart.state,
     ...filters.state,
     ...currency.state,
+    ...auth.state
   },
   mutations: {
     ...products.mutations,
     ...cart.mutations, 
     ...filters.mutations,
     ...currency.mutations,
+    ...auth.mutations
   },
   actions: {
     ...products.actions,
     ...currency.actions,
     ...filters.actions,
     ...cart.actions,
+    ...auth.actions
   },
   getters: {
     ...products.getters,
     ...currency.getters,
     ...filters.getters,
     ...cart.getters,
+    ...auth.getters
   },
-  modules: {
-    auth,
-  }
 })
 
 export default store
